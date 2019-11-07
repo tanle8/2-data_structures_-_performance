@@ -67,7 +67,27 @@ public abstract class Document {
 		// TODO: Implement this method so that you can call it from the 
 	    // getNumSyllables method in BasicDocument (module 2) and 
 	    // EfficientDocument (module 3).
-	    return 0;
+		
+		int numSyllables = 0;
+		boolean newSyllable = true;
+		String vowels = "aeiouy";
+		char[] cArray = word.toCharArray();
+		for (int i = 0; i < cArray.length; i++)
+		{
+		    if (i == cArray.length-1 && Character.toLowerCase(cArray[i]) == 'e' 
+		    		&& newSyllable && numSyllables > 0) {
+                numSyllables--;
+            }
+		    if (newSyllable && vowels.indexOf(Character.toLowerCase(cArray[i])) >= 0) {
+				newSyllable = false;
+				numSyllables++;
+			}
+			else if (vowels.indexOf(Character.toLowerCase(cArray[i])) < 0) {
+				newSyllable = true;
+			}
+		}
+		
+	    return numSyllables;
 	}
 	
 	/** A method for testing
@@ -86,6 +106,8 @@ public abstract class Document {
 		int syllFound = doc.getNumSyllables();
 		int wordsFound = doc.getNumWords();
 		int sentFound = doc.getNumSentences();
+//		double fleshScore = doc.getFleschScore();
+//		System.out.print("\n[info] fleshScore: " + Double.toString(fleshScore) + "\n");
 		if (syllFound != syllables) {
 			System.out.println("\nIncorrect number of syllables.  Found " + syllFound 
 					+ ", expected " + syllables);
@@ -132,9 +154,10 @@ public abstract class Document {
 	{
 	    // TODO: You will play with this method in week 1, and 
 		// then implement it in week 2
-	    return this.text.length();
+//		System.out.print("\n[info] num Words: " + Double.toString(getNumWords()) + "\n");
+		return 206.835 - (1.015 * (double)getNumWords()/getNumSentences()) 
+				- (84.6 * ((double)getNumSyllables())/getNumWords());
 	}
-	
 	
 	
 }
